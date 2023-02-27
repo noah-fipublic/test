@@ -1,0 +1,20 @@
+name: Merge to Main Branch
+
+on:
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  merge-to-main-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - id: merge
+        name: Merging to Main Branch
+        uses: pascalgn/automerge-action@v0.15.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          MERGE_DELETE_BRANCH: true
+          MERGE_DELETE_BRANCH_FILTER: release-please--branches
+          MERGE_LABELS: 'autorelease: pending'
+          MERGE_METHOD: rebase

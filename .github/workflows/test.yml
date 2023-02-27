@@ -1,0 +1,41 @@
+name: Test Code
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  test-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setting Up Pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+
+      - name: Setting Up Node
+        uses: actions/setup-node@v3
+        with:
+          cache: pnpm
+          node-version: 16
+
+      - name: Installing Project Dependencies
+        run: pnpm install
+
+      - name: Building Project
+        run: pnpm build
+
+      - name: Setting Up Environment File
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_BASE_PATH: /api
+          envkey_CLUSTERING: false
+          envkey_NODE_ENV: production
+          envkey_PORT: 3000
+
+      - name: Running Test
+        run: pnpm test

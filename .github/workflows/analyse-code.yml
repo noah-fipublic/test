@@ -1,0 +1,32 @@
+name: Analyse Code
+
+on:
+  schedule:
+    - cron: 0 0 * * 0
+
+permissions:
+  contents: read
+
+jobs:
+  analyse-code:
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    name: Analysing Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Initializing CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+          queries: +security-extended
+
+      - name: Auto Build
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Performing CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
